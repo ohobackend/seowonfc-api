@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: seowonfc-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/seowonfc
+    username: postgres
+    password: ${DB_PASSWORD:postgres1234}   # STEP 3에서 설정한 비밀번호로 변경
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update        # 엔티티 기준으로 테이블 자동 생성/수정 (개발 단계용)
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+server:
+  port: 8080
+
+jwt:
+  secret: seowonfc-local-dev-secret-key-change-this-later-1234567890
