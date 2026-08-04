@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/seowonfc
     username: postgres
-    password: ${DB_PASSWORD:postgres1234}   # STEP 3에서 설정한 비밀번호로 변경
+    password: ${DB_PASSWORD:167181}   # STEP 3에서 설정한 비밀번호로 변경
     driver-class-name: org.postgresql.Driver
 
   jpa:
