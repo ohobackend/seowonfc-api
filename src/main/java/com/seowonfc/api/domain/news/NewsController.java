@@ -4,6 +4,7 @@ import com.seowonfc.api.common.ApiResponse;
 import com.seowonfc.api.domain.news.dto.NewsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class NewsController {
     @GetMapping
     public ApiResponse<Page<NewsResponse>> getList(
             @RequestParam(required = false) NewsCategory category,
-            @PageableDefault(size = 20) Pageable pageable) {
+            @ParameterObject @PageableDefault(size = 20) Pageable pageable) {
         return ApiResponse.success(newsService.getList(category, pageable));
     }
 

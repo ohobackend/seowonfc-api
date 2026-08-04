@@ -3,6 +3,7 @@ package com.seowonfc.api.domain.player;
 import com.seowonfc.api.common.ApiResponse;
 import com.seowonfc.api.domain.player.dto.PlayerResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springdoc.core.annotations.ParameterObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ public class PlayerController {
     @GetMapping
     public ApiResponse<Page<PlayerResponse>> getList(
             @RequestParam(required = false) Position position,
-            @PageableDefault(size = 20) Pageable pageable) {
+            @ParameterObject @PageableDefault(size = 20) Pageable pageable) {
         return ApiResponse.success(playerService.getList(position, pageable));
     }
 
