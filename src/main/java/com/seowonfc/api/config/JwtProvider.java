@@ -42,6 +42,10 @@ public class JwtProvider {
         return Long.valueOf(parse(token).getSubject());
     }
 
+    public String getRole(String token) {
+        return parse(token).get("role", String.class);
+    }
+
     public boolean validate(String token) {
         try {
             parse(token);
