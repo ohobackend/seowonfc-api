@@ -16,6 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(500)
                 .body(ApiResponse.error(ErrorCode.INTERNAL_ERROR));
