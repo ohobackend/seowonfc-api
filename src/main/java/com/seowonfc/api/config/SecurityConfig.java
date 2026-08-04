@@ -1,6 +1,7 @@
 package com.seowonfc.api.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -31,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("GET", "/api/v1/news/**", "/api/v1/players/**",
+                        .requestMatchers(HttpMethod.GET, "/api/v1/news/**", "/api/v1/players/**",
                                 "/api/v1/matches/**", "/api/v1/standings/**",
                                 "/api/v1/sponsors/**").permitAll()
                         .anyRequest().authenticated()
