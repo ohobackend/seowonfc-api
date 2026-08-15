@@ -17,8 +17,18 @@ spring:
     show-sql: false
     open-in-view: false
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 server:
   port: ${PORT:8080}
 
 jwt:
   secret: ${JWT_SECRET}
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:xxxxx}
+  api-key: ${CLOUDINARY_API_KEY:xxxxx}
+  api-secret: ${CLOUDINARY_API_SECRET:xxxxx}

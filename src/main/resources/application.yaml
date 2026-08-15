@@ -16,8 +16,18 @@ spring:
         format_sql: true
     show-sql: true
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 server:
   port: 8080
 
 jwt:
   secret: seowonfc-local-dev-secret-key-change-this-later-1234567890
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:xxxxx}
+  api-key: ${CLOUDINARY_API_KEY:xxxxx}
+  api-secret: ${CLOUDINARY_API_SECRET:xxxxx}
