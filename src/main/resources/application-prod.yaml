@@ -32,3 +32,11 @@ cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME:xxxxx}
   api-key: ${CLOUDINARY_API_KEY:xxxxx}
   api-secret: ${CLOUDINARY_API_SECRET:xxxxx}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
