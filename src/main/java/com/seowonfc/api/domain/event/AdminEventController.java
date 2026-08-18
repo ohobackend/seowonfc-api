@@ -4,10 +4,11 @@ import com.seowonfc.api.common.ApiResponse;
 import com.seowonfc.api.domain.event.dto.EventRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -19,17 +20,25 @@ import java.util.List;
 public class AdminEventController {
 
     private final EventService eventService;
+    private final ObjectMapper objectMapper;
 
     @Operation(summary = "이벤트 등록")
-    @PostMapping
-    public ApiResponse<Long> create(@Valid @RequestBody EventRequest request) {
-        return ApiResponse.success(eventService.create(request));
+    @PostMapping(consumes = "multipart/form-data")
+    public ApiResponse<Long> create(
+            @RequestParam("data") String data,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        EventRequest request = objectMapper.readValue(data, EventRequest.class);
+        return ApiResponse.success(eventService.create(request, file));
     }
 
     @Operation(summary = "이벤트 수정")
-    @PutMapping("/{eventId}")
-    public ApiResponse<Void> update(@PathVariable Long eventId, @Valid @RequestBody EventRequest request) {
-        eventService.update(eventId, request);
+    @PutMapping(value = "/{eventId}", consumes = "multipart/form-data")
+    public ApiResponse<Void> update(
+            @PathVariable Long eventId,
+            @RequestParam("data") String data,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        EventRequest request = objectMapper.readValue(data, EventRequest.class);
+        eventService.update(eventId, request, file);
         return ApiResponse.success(null);
     }
 

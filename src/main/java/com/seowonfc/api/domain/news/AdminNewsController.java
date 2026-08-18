@@ -4,10 +4,11 @@ import com.seowonfc.api.common.ApiResponse;
 import com.seowonfc.api.domain.news.dto.NewsRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.ObjectMapper;
 
 @Tag(name = "[관리자] News", description = "구단 뉴스 관리 API")
 @RestController
@@ -17,17 +18,25 @@ import org.springframework.web.bind.annotation.*;
 public class AdminNewsController {
 
     private final NewsService newsService;
+    private final ObjectMapper objectMapper;
 
     @Operation(summary = "뉴스 등록")
-    @PostMapping
-    public ApiResponse<Long> create(@Valid @RequestBody NewsRequest request) {
-        return ApiResponse.success(newsService.create(request));
+    @PostMapping(consumes = "multipart/form-data")
+    public ApiResponse<Long> create(
+            @RequestParam("data") String data,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        NewsRequest request = objectMapper.readValue(data, NewsRequest.class);
+        return ApiResponse.success(newsService.create(request, file));
     }
 
     @Operation(summary = "뉴스 수정")
-    @PutMapping("/{newsId}")
-    public ApiResponse<Void> update(@PathVariable Long newsId, @Valid @RequestBody NewsRequest request) {
-        newsService.update(newsId, request);
+    @PutMapping(value = "/{newsId}", consumes = "multipart/form-data")
+    public ApiResponse<Void> update(
+            @PathVariable Long newsId,
+            @RequestParam("data") String data,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        NewsRequest request = objectMapper.readValue(data, NewsRequest.class);
+        newsService.update(newsId, request, file);
         return ApiResponse.success(null);
     }
 

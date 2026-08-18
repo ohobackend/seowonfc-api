@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -23,21 +23,23 @@ public class Event extends BaseTimeEntity {
     @Lob
     private String content;
 
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    @Column(nullable = false)
+    private LocalDate eventDate;
+
+    private String imageUrl;
 
     @Builder
-    public Event(String title, String content, LocalDateTime startDate, LocalDateTime endDate) {
+    public Event(String title, String content, LocalDate eventDate, String imageUrl) {
         this.title = title;
         this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.eventDate = eventDate;
+        this.imageUrl = imageUrl;
     }
 
-    public void update(String title, String content, LocalDateTime startDate, LocalDateTime endDate) {
+    public void update(String title, String content, LocalDate eventDate, String imageUrl) {
         this.title = title;
         this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.eventDate = eventDate;
+        this.imageUrl = imageUrl;
     }
 }

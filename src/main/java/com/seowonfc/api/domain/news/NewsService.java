@@ -2,6 +2,7 @@ package com.seowonfc.api.domain.news;
 
 import com.seowonfc.api.common.CustomException;
 import com.seowonfc.api.common.ErrorCode;
+import com.seowonfc.api.domain.image.ImageUploadService;
 import com.seowonfc.api.domain.news.dto.NewsRequest;
 import com.seowonfc.api.domain.news.dto.NewsResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NewsService {
 
     private final NewsRepository newsRepository;
+    private final ImageUploadService imageUploadService;
 
     public Page<NewsResponse> getList(NewsCategory category, Pageable pageable) {
         Page<News> page = (category == null)
@@ -31,25 +34,34 @@ public class NewsService {
     }
 
     @Transactional
-    public Long create(NewsRequest request) {
+    public Long create(NewsRequest request, MultipartFile file) {
+        String thumbnailUrl = resolveThumbnailUrl(request.thumbnailUrl(), file, "news");
         News news = News.builder()
                 .title(request.title())
                 .content(request.content())
                 .category(request.category())
-                .thumbnailUrl(request.thumbnailUrl())
+                .thumbnailUrl(thumbnailUrl)
                 .build();
         return newsRepository.save(news).getId();
     }
 
     @Transactional
-    public void update(Long id, NewsRequest request) {
+    public void update(Long id, NewsRequest request, MultipartFile file) {
         News news = findById(id);
-        news.update(request.title(), request.content(), request.category(), request.thumbnailUrl());
+        String thumbnailUrl = resolveThumbnailUrl(request.thumbnailUrl(), file, "news");
+        news.update(request.title(), request.content(), request.category(), thumbnailUrl);
     }
 
     @Transactional
     public void delete(Long id) {
         newsRepository.delete(findById(id));
+    }
+
+    private String resolveThumbnailUrl(String requestedUrl, MultipartFile file, String folder) {
+        if (file != null && !file.isEmpty()) {
+            return imageUploadService.upload(file, folder).url();
+        }
+        return requestedUrl;
     }
 
     private News findById(Long id) {
