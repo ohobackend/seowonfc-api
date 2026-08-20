@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 public record PlayerApplicationResponse(
         Long id, String applicantName, String name, Integer backNumber, Position position,
         String nationality, String profileImageUrl, ApplicationStatus status,
-        String rejectReason, LocalDateTime createdAt
+        String rejectReason, Long playerId, LocalDateTime createdAt
 ) {
     public static PlayerApplicationResponse from(PlayerApplication app) {
         return new PlayerApplicationResponse(app.getId(), app.getApplicant().getName(),
                 app.getName(), app.getBackNumber(), app.getPosition(), app.getNationality(),
-                app.getProfileImageUrl(), app.getStatus(), app.getRejectReason(), app.getCreatedAt());
+                app.getProfileImageUrl(), app.getStatus(), app.getRejectReason(),
+                app.getPlayerId(), app.getCreatedAt());
     }
 }

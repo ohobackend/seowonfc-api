@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final PlayerApplicationService playerApplicationService;
 
     public Page<PlayerResponse> getList(Position position, Pageable pageable) {
         Page<Player> page = (position == null)
@@ -49,6 +50,7 @@ public class PlayerService {
 
     @Transactional
     public void delete(Long id) {
+        playerApplicationService.cancelApprovalByPlayerId(id);
         playerRepository.delete(findById(id));
     }
 

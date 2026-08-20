@@ -51,7 +51,6 @@ public class PlayerApplicationService {
     @Transactional
     public Long approve(Long applicationId) {
         PlayerApplication application = findById(applicationId);
-        application.approve();
 
         Player player = Player.builder()
                 .name(application.getName())
@@ -60,13 +59,21 @@ public class PlayerApplicationService {
                 .nationality(application.getNationality())
                 .profileImageUrl(application.getProfileImageUrl())
                 .build();
+        Long playerId = playerRepository.save(player).getId();
 
-        return playerRepository.save(player).getId();
+        application.approve(playerId);
+        return playerId;
     }
 
     @Transactional
     public void reject(Long applicationId, String reason) {
         findById(applicationId).reject(reason);
+    }
+
+    @Transactional
+    public void cancelApprovalByPlayerId(Long playerId) {
+        applicationRepository.findByPlayerId(playerId)
+                .ifPresent(PlayerApplication::cancelApproval);
     }
 
     private PlayerApplication findById(Long id) {

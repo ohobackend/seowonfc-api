@@ -37,6 +37,8 @@ public class PlayerApplication extends BaseTimeEntity {
 
     private String rejectReason;
 
+    private Long playerId;
+
     @Builder
     public PlayerApplication(User applicant, String name, Integer backNumber, Position position,
                              String nationality, String profileImageUrl) {
@@ -49,12 +51,19 @@ public class PlayerApplication extends BaseTimeEntity {
         this.status = ApplicationStatus.PENDING;
     }
 
-    public void approve() {
+    public void approve(Long playerId) {
         this.status = ApplicationStatus.APPROVED;
+        this.playerId = playerId;
     }
 
     public void reject(String reason) {
         this.status = ApplicationStatus.REJECTED;
         this.rejectReason = reason;
+    }
+
+    public void cancelApproval() {
+        this.status = ApplicationStatus.REJECTED;
+        this.rejectReason = "관리자에 의해 선수 등록이 취소되었습니다.";
+        this.playerId = null;
     }
 }
